@@ -2,7 +2,7 @@ import Shop from "../models/Shop.js";
 import ErrorHandler from "../utils/ErrorHandler.js";
 import path from "path";
 import fs from "fs";
-import sendMail from "../utils/sendmail.js";
+import sendMail from "../utils/sendMail.js";
 import { CatchAsyncErrors } from "../middleware/CatchAsyncErrors.js";
 import jwt from "jsonwebtoken";
 import sendShopToken from "../utils/ShopToken.js";

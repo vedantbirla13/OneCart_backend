@@ -3,7 +3,7 @@ import ErrorHandler from "../utils/ErrorHandler.js";
 import fs from "fs";
 import path from "path";
 import jwt from "jsonwebtoken";
-import sendMail from "../utils/sendmail.js";
+import sendMail from "../utils/sendMail.js";
 import { CatchAsyncErrors } from "../middleware/CatchAsyncErrors.js";
 import sendToken from "../utils/jwtToken.js";
 

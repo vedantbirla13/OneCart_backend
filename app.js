@@ -10,7 +10,7 @@ const app = express();
 // Middlewares
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000", "https://one-cart-frontend.vercel.app/"],
     credentials: true,
   })
 );

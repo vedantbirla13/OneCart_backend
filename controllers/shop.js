@@ -2,7 +2,6 @@ import Shop from "../models/Shop.js";
 import ErrorHandler from "../utils/ErrorHandler.js";
 import path from "path";
 import fs from "fs";
-import sendMail from "../utils/sendMail.js";
 import { CatchAsyncErrors } from "../middleware/CatchAsyncErrors.js";
 import jwt from "jsonwebtoken";
 import sendShopToken from "../utils/ShopToken.js";
@@ -26,7 +25,7 @@ export const createShop = async (req, res, next) => {
     const sellerEmail = await Shop.findOne({ email });
 
     if (sellerEmail) {
-      const filename = req.file.filename;
+      const filename = req.file?.filename;
       const filePath = `uploads/${filename}`;
       fs.unlink(filePath, (err) => {
         if (err) {
@@ -38,7 +37,7 @@ export const createShop = async (req, res, next) => {
       return next(new ErrorHandler("User already exists", 400));
     }
 
-    const filename = req.file.filename;
+    const filename = req.file?.filename;
     const filepath = path.join(filename);
 
     const seller = {
@@ -51,75 +50,13 @@ export const createShop = async (req, res, next) => {
       zipCode: zipCode,
     };
 
-    const activationToken = createActivatonToken(seller);
+    sendShopToken(seller, 200, res);
 
-    const activationUrl = `http://localhost:3000/seller/activation/${activationToken}`;
-
-    try {
-      await sendMail({
-        email: seller.email,
-        subject: "Activate your shop",
-        message: `
-                    <h2>Hello ${seller.email}</h2>
-                    <p2>please click on the link to activate your shop: ${activationUrl}</p2>
-                    <p>This link is valid for only 30 minutes</p>
-                    <p>Regards...</p>
-                    <p>Ecomm Team</p>
-                    
-                    `,
-      });
-      res.status(201).json({
-        success: true,
-        message: `Please check your email ${seller.email} to activate your shop`,
-      });
-    } catch (error) {
-      return next(new ErrorHandler(error.message, 500));
-    }
   } catch (error) {
     return next(new ErrorHandler(error.message, 400));
   }
 };
 
-// activation token
-const createActivatonToken = (seller) => {
-  return jwt.sign(seller, process.env.ACTIVATION_SECRET, {
-    expiresIn: "5m",
-  });
-};
-
-// Activate user shop
-export const activateShop = CatchAsyncErrors(async (req, res, next) => {
-  try {
-    const { activation_token } = req.body;
-    const newShop = jwt.verify(activation_token, process.env.ACTIVATION_SECRET);
-
-    if (!newShop) {
-      return next(new ErrorHandler("Invalid token", 400));
-    }
-
-    const { name, email, password, avatar, address, phone, zipCode } = newShop;
-
-    let seller = await Shop.findOne({ email });
-
-    if (seller) {
-      return next(new ErrorHandler("Shop user already exists", 400));
-    }
-
-    seller = await Shop.create({
-      name,
-      email,
-      password,
-      avatar,
-      address,
-      phone,
-      zipCode,
-    });
-
-    sendShopToken(seller, 200, res);
-  } catch (error) {
-    return next(new ErrorHandler(error.message, 500));
-  }
-});
 
 // Login shop
 export const loginShop = CatchAsyncErrors(async (req, res, next) => {

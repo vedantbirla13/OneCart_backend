@@ -2,8 +2,6 @@ import User from "../models/User.js";
 import ErrorHandler from "../utils/ErrorHandler.js";
 import fs from "fs";
 import path from "path";
-import jwt from "jsonwebtoken";
-import sendMail from "../utils/sendMail.js";
 import { CatchAsyncErrors } from "../middleware/CatchAsyncErrors.js";
 import sendToken from "../utils/jwtToken.js";
 
@@ -41,77 +39,21 @@ export const createUser = async (req, res, next) => {
 
     const filename = req.file.filename;
     const filepath = path.join(filename);
-    const user = {
+    const user = await User.create({
       name: name,
       email: email,
       password: password,
       avatar: filepath,
-    };
+    });
 
-    const activationToken = createActivatonToken(user);
+    sendToken(user, 201, res);
 
-    const activationUrl = `http://localhost:3000/activation/${activationToken}`;
 
-    try {
-      await sendMail({
-        email: user.email,
-        subject: "Activate your account",
-        message: `
-                    <h2>Hello ${user.email}</h2>
-                    <p2>please click on the link to activate your account: ${activationUrl}</p2>
-                    <p>This link is valid for only 30 minutes</p>
-                    <p>Regards...</p>
-                    <p>Ecomm Team</p>
-                    
-                    `,
-      });
-      res.status(201).json({
-        success: true,
-        message: `Please check your email ${user.email} to activate your account`,
-      });
-    } catch (error) {
-      return next(new ErrorHandler(error.message, 500));
-    }
   } catch (error) {
     return next(new ErrorHandler(error.message, 400));
   }
 };
 
-// activation token
-const createActivatonToken = (user) => {
-  return jwt.sign(user, process.env.ACTIVATION_SECRET, { expiresIn: "5m" });
-};
-
-// Activate user
-export const activateUser = CatchAsyncErrors(async (req, res, next) => {
-  try {
-    const { activation_token } = req.body;
-    const newUser = jwt.verify(activation_token, process.env.ACTIVATION_SECRET);
-
-    if (!newUser) {
-      return next(new ErrorHandler("Invalid token", 400));
-    }
-
-    const { name, email, password, avatar } = newUser;
-
-    let user = await User.findOne({ email });
-
-    if (user) {
-      return next(new ErrorHandler("User already exists", 400));
-    }
-
-    user = await User.create({
-      name,
-      email,
-      password,
-      avatar,
-    });
-
-    sendToken(user, 200, res);
-  } catch (error) {
-    return next(new ErrorHandler(error.message, 500));
-  }
-});
 
 // Login user
 export const loginUser = CatchAsyncErrors(async (req, res, next) => {
@@ -161,9 +103,11 @@ export const getUser = CatchAsyncErrors(async (req, res, next) => {
 // Logout user
 export const logoutUser = CatchAsyncErrors(async (req, res, next) => {
   try {
-    res.cookie("token", null, {
-      expires: new Date(Date.now()),
+    res.cookie("token", "", {
+      expires: new Date(0),
       httpOnly: true,
+      sameSite: "none",
+      secure: true
     });
     
 

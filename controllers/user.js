@@ -165,6 +165,7 @@ export const logoutUser = CatchAsyncErrors(async (req, res, next) => {
       expires: new Date(Date.now()),
       httpOnly: true,
     });
+    
 
     res.status(201).json({
       success: true,

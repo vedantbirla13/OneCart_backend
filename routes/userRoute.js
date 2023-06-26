@@ -13,7 +13,7 @@ router.post("/login-user", loginUser)
 
 router.get("/getUser", isAuthenticated, getUser)
 
-router.get("/logoutUser", isAuthenticated, logoutUser)
+router.get("/logoutUser", logoutUser)
 
 router.put("/update-user-info", isAuthenticated, updateUser)
 

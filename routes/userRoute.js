@@ -1,11 +1,13 @@
 import express from "express"
 import { upload } from "../multer.js";
-import { createUser, getUser, loginUser, logoutUser, updateUser, updateAvatar, updateUserAddress, deleteUserAddress, changePassword } from "../controllers/user.js";
+import { activateUser, createUser, getUser, loginUser, logoutUser, updateUser, updateAvatar, updateUserAddress, deleteUserAddress, changePassword } from "../controllers/user.js";
 import { isAuthenticated } from "../middleware/auth.js";
 
 const router = express.Router();
 
 router.post("/create-user", upload.single("file"), createUser)
+
+router.post("/activation", activateUser)
 
 router.post("/login-user", loginUser)
 

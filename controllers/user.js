@@ -28,7 +28,7 @@ export const createUser = async (req, res, next) => {
     if (userEmail) {
       // If the user already exist then the image should not get uploaded by multer
       // so to prevent this we do the following
-      const filename = req.file.filename;
+      const filename = req.file?.filename;
       const filepath = `uploads/${filename}`;
       fs.unlink(filepath, (err) => {
         if (err) {

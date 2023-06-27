@@ -162,11 +162,9 @@ export const getUser = CatchAsyncErrors(async (req, res, next) => {
 // Logout user
 export const logoutUser = CatchAsyncErrors(async (req, res, next) => {
   try {
-    res.cookie("token", "", {
-      expires: new Date(0),
+    res.cookie("token", null, {
+      expires: new Date(Date.now()),
       httpOnly: true,
-      sameSite: "none",
-      secure: true
     });
     
 

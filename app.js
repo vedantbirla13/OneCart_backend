@@ -4,9 +4,12 @@ import ErrorHandler from "./middleware/error.js";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import cors from "cors";
+import { dirname} from 'path';
+import path from "path";
+import { fileURLToPath } from 'url';
 
 const app = express();
-
+const __dirname = dirname(fileURLToPath(import.meta.url));
 // Middlewares
 app.use(
   cors({
@@ -20,7 +23,7 @@ app.use(express.urlencoded({
   extended:true
 }));
 app.use(cookieParser());
-app.use("/", express.static("uploads"));
+app.use("/", express.static(path.join(__dirname,"./uploads")));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/test", (req, res) => {
   res.send("Hello world!");

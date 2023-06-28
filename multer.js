@@ -1,10 +1,14 @@
 import multer from "multer";
-import path from "path"
+import path, { dirname } from "path"
+import { fileURLToPath } from "url";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const storage = multer.diskStorage({
     destination: function(req,res,cb){
         cb(null, path.join(__dirname, './uploads') )
     },
+
     filename: function(req,file,cb) {
         const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
         const filename = file.originalname.split(".")[0];

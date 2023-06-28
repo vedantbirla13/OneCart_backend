@@ -13,6 +13,7 @@ export const createProduct = CatchAsyncErrors(async (req, res, next) => {
       return next(new ErrorHandler("Shop Id is invalid!!", 401));
     } else {
       const files = req.files;
+      console.log(req.file)
       const imageUrls = files.map((file) => `${file.filename}`);
       const productData = req.body;
       productData.images = imageUrls;
@@ -48,9 +49,10 @@ export const getProducts = CatchAsyncErrors(async (req, res, next) => {
 export const deleteProduct = CatchAsyncErrors(async (req, res, next) => {
   try {
     const productId = req.params.id;
+    console.log(productId)
 
     const productData = await Product.findById(productId);
-    productData.images.forEach((imageUrl) => {
+    productData?.images.forEach((imageUrl) => {
       const filename = imageUrl;
       const filepath = `uploads/${filename}`;
 

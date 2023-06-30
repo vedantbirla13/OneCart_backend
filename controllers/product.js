@@ -1,11 +1,11 @@
-import { CatchAsyncErrors } from "../middleware/CatchAsyncErrors.js";
-import Product from "../models/Product.js";
-import Shop from "../models/Shop.js";
-import ErrorHandler from "../utils/ErrorHandler.js";
-import Order from "../models/Order.js";
-import fs from "fs";
+const  CatchAsyncErrors  = require("../middleware/CatchAsyncErrors.js");
+const Product = require("../models/Product.js");
+const Shop = require("../models/Shop.js");
+const ErrorHandler = require("../utils/ErrorHandler.js");
+const Order = require("../models/Order.js");
+const fs = require("fs");
 
-export const createProduct = CatchAsyncErrors(async (req, res, next) => {
+ const createProduct = CatchAsyncErrors(async (req, res, next) => {
   try {
     const shopId = req.body.shopId;
     const shop = await Shop.findById(shopId);
@@ -32,7 +32,7 @@ export const createProduct = CatchAsyncErrors(async (req, res, next) => {
 });
 
 // Get all products shop
-export const getProducts = CatchAsyncErrors(async (req, res, next) => {
+ const getProducts = CatchAsyncErrors(async (req, res, next) => {
   try {
     const products = await Product.find({ shopId: req.params.id });
 
@@ -46,7 +46,7 @@ export const getProducts = CatchAsyncErrors(async (req, res, next) => {
 });
 
 // Delete a product
-export const deleteProduct = CatchAsyncErrors(async (req, res, next) => {
+ const deleteProduct = CatchAsyncErrors(async (req, res, next) => {
   try {
     const productId = req.params.id;
     console.log(productId)
@@ -79,7 +79,7 @@ export const deleteProduct = CatchAsyncErrors(async (req, res, next) => {
 });
 
 // Get all products
-export const getAllProducts = CatchAsyncErrors(async (req, res, next) => {
+ const getAllProducts = CatchAsyncErrors(async (req, res, next) => {
   try {
     const products = await Product.find().sort({ createdAt: -1 });
 
@@ -93,7 +93,7 @@ export const getAllProducts = CatchAsyncErrors(async (req, res, next) => {
 });
 
 // Review for product
-export const reviewProduct = CatchAsyncErrors(async (req, res, next) => {
+ const reviewProduct = CatchAsyncErrors(async (req, res, next) => {
   try {
     const { user, rating, comment, productId, orderId } = req.body;
 
@@ -143,3 +143,7 @@ export const reviewProduct = CatchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler(error.message, 500));
   }
 });
+
+module.exports = {
+  createProduct, getAllProducts, getProducts, deleteProduct, reviewProduct
+}

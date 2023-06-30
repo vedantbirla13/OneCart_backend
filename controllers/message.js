@@ -1,9 +1,9 @@
-import { CatchAsyncErrors } from "../middleware/CatchAsyncErrors.js";
-import Message from "../models/Message.js";
-import ErrorHandler from "../utils/ErrorHandler.js";
+const  CatchAsyncErrors  = require("../middleware/CatchAsyncErrors.js");
+const Message = require("../models/Message.js");
+const ErrorHandler = require("../utils/ErrorHandler.js");
 
 
-export const createMessage = CatchAsyncErrors(async(req,res,next) => {
+ const createMessage = CatchAsyncErrors(async(req,res,next) => {
     try {
         const messageData = req.body
 
@@ -39,7 +39,7 @@ export const createMessage = CatchAsyncErrors(async(req,res,next) => {
 })
 
 // Get messages
-export const getMessages = CatchAsyncErrors(async(req,res,next) => {
+ const getMessages = CatchAsyncErrors(async(req,res,next) => {
     try {
         const messages = await Message.find({
             conversationId: req.params.id
@@ -53,4 +53,8 @@ export const getMessages = CatchAsyncErrors(async(req,res,next) => {
         return next(new ErrorHandler(error), 500)
     }
 })
+
+module.exports = {
+    createMessage, getMessages
+}
 

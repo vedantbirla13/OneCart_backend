@@ -1,7 +1,7 @@
-import express from "express"
-import { upload } from "../multer.js";
-import { activateUser, createUser, getUser, loginUser, logoutUser, updateUser, updateAvatar, updateUserAddress, deleteUserAddress, changePassword } from "../controllers/user.js";
-import { isAuthenticated } from "../middleware/auth.js";
+const express = require("express")
+const { upload } = require("../multer.js");
+const { activateUser, createUser, getUser, loginUser, logoutUser, updateUser, updateAvatar, updateUserAddress, deleteUserAddress, changePassword } = require("../controllers/user.js");
+const { isAuthenticated } = require("../middleware/auth.js");
 
 const router = express.Router();
 
@@ -25,4 +25,4 @@ router.delete("/delete-user-address/:id", isAuthenticated, deleteUserAddress)
 
 router.put("/change-user-password", isAuthenticated, changePassword)
 
-export default router
+module.exports = router

@@ -1,7 +1,7 @@
-import express from "express"
-import { createProduct, deleteProduct, getProducts, getAllProducts, reviewProduct } from "../controllers/product.js";
-import { isAuthenticated, isSellerAuthenticated } from "../middleware/auth.js"
-import { upload } from "../multer.js" 
+const express = require("express")
+const { createProduct, deleteProduct, getProducts, getAllProducts, reviewProduct } = require("../controllers/product.js");
+const { isAuthenticated, isSellerAuthenticated } = require("../middleware/auth.js")
+const { upload } = require("../multer.js") 
 
 const router = express.Router();
 
@@ -15,4 +15,4 @@ router.get("/get-all-products", getAllProducts)
 
 router.post("/review-product", isAuthenticated , reviewProduct)
 
-export default router;
+module.exports = router;

@@ -1,14 +1,14 @@
-import User from "../models/User.js";
-import ErrorHandler from "../utils/ErrorHandler.js";
-import fs from "fs";
-import path from "path";
-import jwt from "jsonwebtoken";
-import sendMail from "../utils/sendMail.js";
-import { CatchAsyncErrors } from "../middleware/CatchAsyncErrors.js";
-import sendToken from "../utils/jwtToken.js";
+const User = require("../models/User.js");
+const ErrorHandler = require("../utils/ErrorHandler.js");
+const fs = require("fs");
+const path = require("path");
+const jwt = require("jsonwebtoken");
+const sendMail = require("../utils/sendMail.js");
+const  CatchAsyncErrors  = require("../middleware/CatchAsyncErrors.js");
+const sendToken = require("../utils/jwtToken.js");
 
 // Create user
-export const createUser = async (req, res, next) => {
+ const createUser = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
 
@@ -84,7 +84,7 @@ const createActivatonToken = (user) => {
 };
 
 // Activate user
-export const activateUser = CatchAsyncErrors(async (req, res, next) => {
+ const activateUser = CatchAsyncErrors(async (req, res, next) => {
   try {
     const { activation_token } = req.body;
     const newUser = jwt.verify(activation_token, process.env.ACTIVATION_SECRET);
@@ -115,7 +115,7 @@ export const activateUser = CatchAsyncErrors(async (req, res, next) => {
 });
 
 // Login user
-export const loginUser = CatchAsyncErrors(async (req, res, next) => {
+ const loginUser = CatchAsyncErrors(async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
@@ -142,7 +142,7 @@ export const loginUser = CatchAsyncErrors(async (req, res, next) => {
 });
 
 // Load user
-export const getUser = CatchAsyncErrors(async (req, res, next) => {
+ const getUser = CatchAsyncErrors(async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id);
 
@@ -160,7 +160,7 @@ export const getUser = CatchAsyncErrors(async (req, res, next) => {
 });
 
 // Logout user
-export const logoutUser = CatchAsyncErrors(async (req, res, next) => {
+ const logoutUser = CatchAsyncErrors(async (req, res, next) => {
   try {
     res.cookie("token", null, {
       expires: new Date(Date.now()),
@@ -178,7 +178,7 @@ export const logoutUser = CatchAsyncErrors(async (req, res, next) => {
 });
 
 // Update user info
-export const updateUser = CatchAsyncErrors(async (req, res, next) => {
+ const updateUser = CatchAsyncErrors(async (req, res, next) => {
   try {
     const { name, email, password, phoneNumber } = req.body;
     const user = await User.findOne({ email }).select("+password");
@@ -209,7 +209,7 @@ export const updateUser = CatchAsyncErrors(async (req, res, next) => {
 });
 
 // Update avatar
-export const updateAvatar = CatchAsyncErrors(async (req, res, next) => {
+ const updateAvatar = CatchAsyncErrors(async (req, res, next) => {
   try {
     const existUser = await User.findById(req.user.id);
     const existAvatarPath = `uploads/${existUser.avatar}`;
@@ -232,7 +232,7 @@ export const updateAvatar = CatchAsyncErrors(async (req, res, next) => {
 });
 
 // Update user address
-export const updateUserAddress = CatchAsyncErrors(async (req, res, next) => {
+ const updateUserAddress = CatchAsyncErrors(async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id);
     const sameAddress = user.addresses.find(
@@ -268,7 +268,7 @@ export const updateUserAddress = CatchAsyncErrors(async (req, res, next) => {
 });
 
 // Delete user address
-export const deleteUserAddress = CatchAsyncErrors(async (req, res, next) => {
+ const deleteUserAddress = CatchAsyncErrors(async (req, res, next) => {
   try {
     const userId = req.user._id;
     const addressId = req.params.id;
@@ -292,7 +292,7 @@ export const deleteUserAddress = CatchAsyncErrors(async (req, res, next) => {
 });
 
 // Change user password
-export const changePassword = CatchAsyncErrors(async (req, res, next) => {
+ const changePassword = CatchAsyncErrors(async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id).select("+password");
     const isPasswordMatch = await user.comparePassword(req.body.oldPassword);
@@ -317,3 +317,7 @@ export const changePassword = CatchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler(error.message, 500));
   }
 });
+
+module.exports = {
+  createUser, getUser, deleteUserAddress, changePassword, updateAvatar, updateUser, updateUserAddress, loginUser, activateUser, logoutUser
+}

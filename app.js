@@ -1,15 +1,11 @@
-import express from "express";
-import dotenv from "dotenv";
-import ErrorHandler from "./middleware/error.js";
-import cookieParser from "cookie-parser";
-import bodyParser from "body-parser";
-import cors from "cors";
-import { dirname} from 'path';
-import path from "path";
-import { fileURLToPath } from 'url';
+const express =  require("express");
+const ErrorHandler = require("./middleware/error.js");
+const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const path = require("path");
 
 const app = express();
-const __dirname = dirname(fileURLToPath(import.meta.url));
 // Middlewares
 app.use(
   cors({
@@ -31,19 +27,19 @@ app.use("/test", (req, res) => {
 
 // Config
 if (process.env.NODE_ENV !== "production") {
-  dotenv.config({
+  require("dotenv").config({
     path: "./config/config.env",
   });
 }
 
 // Import routes
-import user from "./routes/userRoute.js";
-import shop from "./routes/shopRoute.js"
-import product from "./routes/productRoute.js"
-import event from "./routes/eventRoute.js"
-import coupon from "./routes/couponRoute.js"
-import payment from "./routes/paymentRoute.js"
-import order from "./routes/orderRoute.js"
+const user = require("./routes/userRoute.js");
+const shop = require("./routes/shopRoute.js");
+const product = require("./routes/productRoute.js");
+const event = require("./routes/eventRoute.js");
+const coupon = require("./routes/couponRoute.js");
+const payment = require("./routes/paymentRoute.js");
+const order = require("./routes/orderRoute.js");
 
 
 app.use("/api/v1/user", user);
@@ -58,4 +54,4 @@ app.use("/api/v1/order", order);
 // Error handler
 app.use(ErrorHandler);
 
-export default app;
+module.exports = app

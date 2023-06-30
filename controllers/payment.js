@@ -1,6 +1,6 @@
-import { CatchAsyncErrors } from "../middleware/CatchAsyncErrors.js";
-import ErrorHandler from "../utils/ErrorHandler.js";
-import dotenv from "dotenv"
+const  CatchAsyncErrors  = require("../middleware/CatchAsyncErrors.js");
+const ErrorHandler = require("../utils/ErrorHandler.js");
+const dotenv = require("dotenv")
 
 dotenv.config({
     path: "./config/config.env",
@@ -8,7 +8,7 @@ dotenv.config({
 
 
 
-export const paymentProcess = CatchAsyncErrors(async(req,res,next) => {
+ const paymentProcess = CatchAsyncErrors(async(req,res,next) => {
     try {
         const myPayment = await stripe.paymentIntents.create({
             amount: req.body.amount,
@@ -26,6 +26,10 @@ export const paymentProcess = CatchAsyncErrors(async(req,res,next) => {
     }
 })
 
-export const getApiKey = CatchAsyncErrors(async(req,res,next) => {
+ const getApiKey = CatchAsyncErrors(async(req,res,next) => {
     res.status(200).json({ stripeApiKey: process.env.STRIPE_API_KEY });
 })
+
+module.exports = {
+    paymentProcess, getApiKey
+  }

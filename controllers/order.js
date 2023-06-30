@@ -1,9 +1,9 @@
-import { CatchAsyncErrors } from "../middleware/CatchAsyncErrors.js";
-import ErrorHandler from "../utils/ErrorHandler.js";
-import Order from "../models/Order.js";
-import Product from "../models/Product.js";
+const  CatchAsyncErrors  = require("../middleware/CatchAsyncErrors.js");
+const ErrorHandler = require("../utils/ErrorHandler.js");
+const Order = require("../models/Order.js");
+const Product = require("../models/Product.js");
 
-export const createOrder = CatchAsyncErrors(async (req, res, next) => {
+ const createOrder = CatchAsyncErrors(async (req, res, next) => {
   try {
     const { cart, shippingAddress, user, totalPrice, paymentInfo } = req.body;
 
@@ -43,7 +43,7 @@ export const createOrder = CatchAsyncErrors(async (req, res, next) => {
 });
 
 // Get all orders of user
-export const getAllOrders = CatchAsyncErrors(async (req, res, next) => {
+ const getAllOrders = CatchAsyncErrors(async (req, res, next) => {
   try {
     const orders = await Order.find({ "user._id": req.params.userId }).sort({
       createdAt: -1,
@@ -59,7 +59,7 @@ export const getAllOrders = CatchAsyncErrors(async (req, res, next) => {
 });
 
 // Get all orders of seller
-export const getAllSellerOrders = CatchAsyncErrors(async (req, res, next) => {
+ const getAllSellerOrders = CatchAsyncErrors(async (req, res, next) => {
   try {
     const orders = await Order.find({
       "cart.shop._id": req.params.shopId,
@@ -77,7 +77,7 @@ export const getAllSellerOrders = CatchAsyncErrors(async (req, res, next) => {
 });
 
 // Update order status
-export const updateOrderStatus = CatchAsyncErrors(async (req, res, next) => {
+ const updateOrderStatus = CatchAsyncErrors(async (req, res, next) => {
   try {
     const order = await Order.findById(req.params.id);
 
@@ -118,7 +118,7 @@ export const updateOrderStatus = CatchAsyncErrors(async (req, res, next) => {
 });
 
 // Refund the customer
-export const RefundUser = CatchAsyncErrors(async (req, res, next) => {
+ const RefundUser = CatchAsyncErrors(async (req, res, next) => {
   try {
     const order = await Order.findById(req.params.id);
 
@@ -146,7 +146,7 @@ export const RefundUser = CatchAsyncErrors(async (req, res, next) => {
 });
 
 // Accept the refund
-export const RefundSuccess = CatchAsyncErrors(async (req, res, next) => {
+ const RefundSuccess = CatchAsyncErrors(async (req, res, next) => {
   try {
     const order = await Order.findById(req.params.id);
 
@@ -181,3 +181,7 @@ export const RefundSuccess = CatchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler(error.message, 500));
   }
 });
+
+module.exports = {
+  createOrder, getAllOrders, getAllSellerOrders, updateOrderStatus, RefundSuccess, RefundUser
+}

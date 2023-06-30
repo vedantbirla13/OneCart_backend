@@ -1,8 +1,5 @@
-import multer from "multer";
-import path, { dirname } from "path"
-import { fileURLToPath } from "url";
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const multer = require("multer");
+const path = require("path")
 
 const storage = multer.diskStorage({
     destination: function(req,res,cb){
@@ -16,4 +13,4 @@ const storage = multer.diskStorage({
     },
 });
 
-export const upload = multer({ storage: storage });
+exports.upload = multer({ storage: storage });

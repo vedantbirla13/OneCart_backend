@@ -1,7 +1,7 @@
-import express from "express"
-import { upload } from "../multer.js";
-import { createShop, activateShop, loginShop, getSeller, logoutShop, getShopInfo, updateShopAvatar, updateShopInfo } from "../controllers/shop.js";
-import { isAuthenticated, isSellerAuthenticated } from "../middleware/auth.js";
+const express = require("express")
+const { upload } = require("../multer.js");
+const { createShop, activateShop, loginShop, getSeller, logoutShop, getShopInfo, updateShopAvatar, updateShopInfo } = require("../controllers/shop.js");
+const { isAuthenticated, isSellerAuthenticated } = require("../middleware/auth.js");
 
 const router = express.Router();
 
@@ -21,4 +21,4 @@ router.put("/update-shop-avatar", isSellerAuthenticated, upload.single("image"),
 
 router.put("/update-shop-info", isSellerAuthenticated, updateShopInfo)
 
-export default router
+module.exports = router

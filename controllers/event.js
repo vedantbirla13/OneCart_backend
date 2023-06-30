@@ -1,11 +1,11 @@
-import Event from "../models/Event.js";
-import Shop from "../models/Shop.js";
-import ErrorHandler from "../utils/ErrorHandler.js";
-import {CatchAsyncErrors} from "../middleware/CatchAsyncErrors.js"
+const Event = require("../models/Event.js");
+const Shop = require("../models/Shop.js");
+const ErrorHandler = require("../utils/ErrorHandler.js");
+const  CatchAsyncErrors  = require("../middleware/CatchAsyncErrors.js");
 
 
 // Create event
-export const createEvent = CatchAsyncErrors(async(req,res,next) => {
+ const createEvent = CatchAsyncErrors(async(req,res,next) => {
     try {
         const shopId = req.body.shopId
         const shop = await Shop.findById(shopId);
@@ -32,7 +32,7 @@ export const createEvent = CatchAsyncErrors(async(req,res,next) => {
 })
 
 // Get all events
-export const getAllEventsShop = CatchAsyncErrors(async(req,res,next) => {
+ const getAllEventsShop = CatchAsyncErrors(async(req,res,next) => {
     try {
         const events = await Event.find({ shopId: req.params.id })
 
@@ -46,7 +46,7 @@ export const getAllEventsShop = CatchAsyncErrors(async(req,res,next) => {
 })
 
 // Delete a event
-export const deleteEvent = CatchAsyncErrors(async(req,res,next) => {
+ const deleteEvent = CatchAsyncErrors(async(req,res,next) => {
     try {
         const eventId = req.params.id;
 
@@ -78,7 +78,7 @@ export const deleteEvent = CatchAsyncErrors(async(req,res,next) => {
 }) 
 
 // Get all events
-export const getAllEvents = CatchAsyncErrors(async(req,res,next) => {
+ const getAllEvents = CatchAsyncErrors(async(req,res,next) => {
     try {
         const events = await Event.find();
 
@@ -90,3 +90,7 @@ export const getAllEvents = CatchAsyncErrors(async(req,res,next) => {
         return next(new ErrorHandler(error.message,500))
     }
 }) 
+
+module.exports = {
+    createEvent, getAllEventsShop, getAllEvents, deleteEvent
+  }

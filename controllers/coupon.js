@@ -1,9 +1,9 @@
-import { CatchAsyncErrors } from "../middleware/CatchAsyncErrors.js";
-import CouponCode from "../models/CouponCode.js";
-import Shop from "../models/Shop.js";
-import ErrorHandler from "../utils/ErrorHandler.js";
+const  CatchAsyncErrors  = require("../middleware/CatchAsyncErrors.js");
+const CouponCode = require("../models/CouponCode.js");
+const Shop = require("../models/Shop.js");
+const ErrorHandler = require("../utils/ErrorHandler.js");
 
-export const createCoupon = CatchAsyncErrors(async (req, res, next) => {
+const createCoupon = CatchAsyncErrors(async (req, res, next) => {
   try {
     const couponExist = await CouponCode.find({ name: req.body.name });
 
@@ -22,7 +22,7 @@ export const createCoupon = CatchAsyncErrors(async (req, res, next) => {
   }
 });
 
-export const getCoupon =  CatchAsyncErrors(async(req,res,next) => {
+const getCoupon =  CatchAsyncErrors(async(req,res,next) => {
     try {
 
       const coupon = await CouponCode.find({ shopId : req.seller.id  })
@@ -37,7 +37,7 @@ export const getCoupon =  CatchAsyncErrors(async(req,res,next) => {
     }
 })
 
-export const deleteCoupon = CatchAsyncErrors(async(req,res,next) => {
+const deleteCoupon = CatchAsyncErrors(async(req,res,next) => {
   try {
       const coupon = await CouponCode.findByIdAndDelete(req.params.id);
 
@@ -54,7 +54,7 @@ export const deleteCoupon = CatchAsyncErrors(async(req,res,next) => {
   }
 })
 
-export const getCouponValue = CatchAsyncErrors(async(req,res,next) => {
+const getCouponValue = CatchAsyncErrors(async(req,res,next) => {
   try {
     const couponCode = await CouponCode.findOne({ name: req.params.name });
 
@@ -66,3 +66,7 @@ export const getCouponValue = CatchAsyncErrors(async(req,res,next) => {
     return next (new ErrorHandler(error.message, 500))
   }
 })
+
+module.exports = {
+  createCoupon, getCoupon, deleteCoupon, getCouponValue
+}

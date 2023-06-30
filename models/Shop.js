@@ -1,7 +1,6 @@
-import mongoose from "mongoose";
-import bcrypt from "bcrypt"
-import jwt from "jsonwebtoken"
-import crypto from "crypto"
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const shopSchema = mongoose.Schema({
     name: {
@@ -74,4 +73,4 @@ shopSchema.methods.comparePassword = async function(enteredPassword) {
 
 
 
-export default mongoose.model("Shop", shopSchema)
+module.exports = mongoose.model("Shop", shopSchema);

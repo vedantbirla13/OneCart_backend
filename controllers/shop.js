@@ -1,14 +1,14 @@
-import Shop from "../models/Shop.js";
-import ErrorHandler from "../utils/ErrorHandler.js";
-import path from "path";
-import fs from "fs";
-import sendMail from "../utils/sendMail.js";
-import { CatchAsyncErrors } from "../middleware/CatchAsyncErrors.js";
-import jwt from "jsonwebtoken";
-import sendShopToken from "../utils/ShopToken.js";
+const Shop = require("../models/Shop.js");
+const ErrorHandler = require("../utils/ErrorHandler.js");
+const path = require("path");
+const fs = require("fs");
+const sendMail = require("../utils/sendMail.js");
+const  CatchAsyncErrors  = require("../middleware/CatchAsyncErrors.js");
+const jwt = require("jsonwebtoken");
+const sendShopToken = require("../utils/ShopToken.js");
 
 // Create shop
-export const createShop = async (req, res, next) => {
+ const createShop = async (req, res, next) => {
   try {
     const { name, email, password, address, phone, zipCode } = req.body;
 
@@ -89,7 +89,7 @@ const createActivatonToken = (seller) => {
 };
 
 // Activate user shop
-export const activateShop = CatchAsyncErrors(async (req, res, next) => {
+ const activateShop = CatchAsyncErrors(async (req, res, next) => {
   try {
     const { activation_token } = req.body;
     const newShop = jwt.verify(activation_token, process.env.ACTIVATION_SECRET);
@@ -123,7 +123,7 @@ export const activateShop = CatchAsyncErrors(async (req, res, next) => {
 });
 
 // Login shop
-export const loginShop = CatchAsyncErrors(async (req, res, next) => {
+ const loginShop = CatchAsyncErrors(async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
@@ -150,7 +150,7 @@ export const loginShop = CatchAsyncErrors(async (req, res, next) => {
 });
 
 // Load Seller
-export const getSeller = CatchAsyncErrors(async (req, res, next) => {
+const getSeller = CatchAsyncErrors(async (req, res, next) => {
   try {
     const seller = await Shop.findById(req.seller.id);
 
@@ -168,7 +168,7 @@ export const getSeller = CatchAsyncErrors(async (req, res, next) => {
 });
 
 // Logout from shop
-export const logoutShop = CatchAsyncErrors(async (req, res, next) => {
+ const logoutShop = CatchAsyncErrors(async (req, res, next) => {
   try {
     res.cookie("Shop_token", null, {
       expires: new Date(Date.now()),
@@ -185,7 +185,7 @@ export const logoutShop = CatchAsyncErrors(async (req, res, next) => {
 });
 
 // Get shop info
-export const getShopInfo = CatchAsyncErrors(async (req, res, next) => {
+ const getShopInfo = CatchAsyncErrors(async (req, res, next) => {
   try {
     const shop = await Shop.findById(req.params.id);
 
@@ -199,7 +199,7 @@ export const getShopInfo = CatchAsyncErrors(async (req, res, next) => {
 });
 
 // Update shop Profile picture
-export const updateShopAvatar = CatchAsyncErrors(async (req, res, next) => {
+ const updateShopAvatar = CatchAsyncErrors(async (req, res, next) => {
   try {
     const existShopUser = await Shop.findById(req.seller._id);
     const existAvatarPath = `uploads/${existShopUser.avatar}`;
@@ -222,7 +222,7 @@ export const updateShopAvatar = CatchAsyncErrors(async (req, res, next) => {
 });
 
 // Update Shop info
-export const updateShopInfo = CatchAsyncErrors(async (req, res, next) => {
+ const updateShopInfo = CatchAsyncErrors(async (req, res, next) => {
   try {
     const { name, description, address, phone, zipCode } = req.body;
     const shop = await Shop.findOne(req.seller._id);
@@ -247,3 +247,7 @@ export const updateShopInfo = CatchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler(error.message, 500));
   }
 });
+
+module.exports = {
+  createShop, loginShop, getSeller, getShopInfo, loginShop, logoutShop, updateShopAvatar, updateShopInfo, activateShop
+}

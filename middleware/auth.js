@@ -1,10 +1,10 @@
-import Shop from "../models/Shop.js";
-import User from "../models/User.js";
-import ErrorHandler from "../utils/ErrorHandler.js";
-import { CatchAsyncErrors } from "./CatchAsyncErrors.js";
-import jwt from "jsonwebtoken"
+const Shop = require("../models/Shop.js");
+const User = require("../models/User.js");
+const ErrorHandler = require("../utils/ErrorHandler.js");
+const  CatchAsyncErrors  = require("../middleware/CatchAsyncErrors.js");
+const jwt = require("jsonwebtoken")
 
-export const isAuthenticated = CatchAsyncErrors(async(req,res,next) => {
+ const isAuthenticated = CatchAsyncErrors(async(req,res,next) => {
     const { token } = req.cookies
     
     if(!token){
@@ -19,7 +19,7 @@ export const isAuthenticated = CatchAsyncErrors(async(req,res,next) => {
 }) 
 
 
-export const isSellerAuthenticated = CatchAsyncErrors(async(req,res,next) => {
+ const isSellerAuthenticated = CatchAsyncErrors(async(req,res,next) => {
     const { Shop_token } = req.cookies
     
     if(!Shop_token){
@@ -33,3 +33,6 @@ export const isSellerAuthenticated = CatchAsyncErrors(async(req,res,next) => {
     next()
 }) 
 
+module.exports = {
+    isAuthenticated, isSellerAuthenticated
+}

@@ -1,6 +1,6 @@
-import express from "express"
-import { isSellerAuthenticated } from "../middleware/auth.js";
-import { RefundSuccess, RefundUser, createOrder, getAllOrders, getAllSellerOrders, updateOrderStatus } from "../controllers/order.js"
+const express = require("express")
+const { isSellerAuthenticated } = require("../middleware/auth.js");
+const { RefundSuccess, RefundUser, createOrder, getAllOrders, getAllSellerOrders, updateOrderStatus } = require("../controllers/order.js")
 
 const router = express.Router();
 
@@ -16,4 +16,4 @@ router.put("/refund-user/:id", isSellerAuthenticated, RefundUser)
 
 router.put("/refund-user-success/:id", isSellerAuthenticated, RefundSuccess)
 
-export default router
+module.exports = router
